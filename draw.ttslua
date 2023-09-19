@@ -1,5 +1,13 @@
+-- https://www.reddit.com/r/tabletopsimulator/comments/m9dtpp/scripting_pawels_super_basic_scripting_guide/
+
 local maxHand = 5
 local deckObject
+local luigisHand = {}
+
+
+function dealToLuigi(deckObject, luigisHand)
+    
+end
 
 function dealFiveToSeatedPlayers(deckObject)
     for _,playerColor in ipairs(getSeatedPlayers()) do
@@ -17,4 +25,31 @@ end
 
 function setDeckObject(deckObject)
   self.deckObject = deckObject
+end
+
+function setLuigisHand()
+    local listOfPositions = {}
+    local listOfCards = {}
+
+    for _, snapPoint in ipairs(Global.getSnapPoints()) do
+        table.insert(listOfPositions, snapPoint.position)
+    end
+
+    for _, object in ipairs(Global.getObjects()) do
+        for _, position in ipairs(listOfPositions) do
+            if(object.position == position) then
+                table.insert(listOfCards, object)
+            end
+        end
+    end
+
+    self.luigisHand = listOfCards
+end
+
+function getLuigisHand()
+    if(#self.luigisHand = 0) then
+        self.call("setLuigisHand")
+    end
+
+    return self.luigisHand
 end
