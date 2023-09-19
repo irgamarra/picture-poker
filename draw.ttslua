@@ -1,12 +1,15 @@
 -- https://www.reddit.com/r/tabletopsimulator/comments/m9dtpp/scripting_pawels_super_basic_scripting_guide/
 
-local maxHand = 5
-local deckObject
+local maxHand = 0
+local deckObject = {}
 local luigisHand = {}
 
-
 function dealToLuigi(deckObject, luigisHand)
-    
+    for _,object in ipairs(luigisHand) do
+        deckObject.takeObject({
+            position = object.position,
+        })
+    end
 end
 
 function dealFiveToSeatedPlayers(deckObject)
@@ -23,8 +26,10 @@ function fillHandToSeatedPlayers(deckObject)
     end
 end
 
-function setDeckObject(deckObject)
-  self.deckObject = deckObject
+function setVariables(maxHand, deckObject)
+    self.maxHand = maxHand
+    self.deckObject = deckObject
+    self.call("setLuigisHand")
 end
 
 function setLuigisHand()
