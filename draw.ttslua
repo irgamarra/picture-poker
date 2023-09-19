@@ -4,7 +4,14 @@ local maxHand = 0
 local deckObject = {}
 local luigisHand = {}
 
-function dealToLuigi(deckObject, luigisHand)
+function setVariables(maxHand, deckObject)
+    self.maxHand = maxHand
+    self.deckObject = deckObject
+    self.call("setLuigisHand")
+end
+
+function dealToLuigi()
+    self.call("setLuigisHand")
     for _,object in ipairs(luigisHand) do
         deckObject.takeObject({
             position = object.position,
@@ -12,13 +19,13 @@ function dealToLuigi(deckObject, luigisHand)
     end
 end
 
-function dealFiveToSeatedPlayers(deckObject)
+function dealFiveToSeatedPlayers()
     for _,playerColor in ipairs(getSeatedPlayers()) do
         deckObject.deal(maxHand, playerColor)
     end
 end
 
-function fillHandToSeatedPlayers(deckObject)
+function fillHandToSeatedPlayers()
     for _,player in ipairs(getPlayers()) do
         local handsCount = player.getHandCount()
         local cardsToDeal = maxHand - handsCount
@@ -26,11 +33,6 @@ function fillHandToSeatedPlayers(deckObject)
     end
 end
 
-function setVariables(maxHand, deckObject)
-    self.maxHand = maxHand
-    self.deckObject = deckObject
-    self.call("setLuigisHand")
-end
 
 function setLuigisHand()
     local listOfPositions = {}
