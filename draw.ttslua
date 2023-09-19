@@ -2,18 +2,19 @@
 
 local maxHand = 0
 local deckObject = {}
+local luigisHandPositions = {}
 local luigisHand = {}
 
 function setVariables(maxHand, deckObject)
     self.maxHand = maxHand
     self.deckObject = deckObject
-    self.call("setLuigisHand")
+    self.call("setLuigisHandPositions")
 end
 
 function dealToLuigi()
-    for _,object in ipairs(luigisHand) do
+    for _, position in ipairs(luigisHandPositions) do
         deckObject.takeObject({
-            position = object.position,
+            position = position,
         })
     end
 end
@@ -32,18 +33,18 @@ function fillHandToSeatedPlayers()
     end
 end
 
+function setLuigisHandPositions() do
+    for _, snapPoint in ipairs(Global.getSnapPoints()) do
+        table.insert(luigisHandPositions, snapPoint.position)
+    end
+end
 
 function setLuigisHand()
-    local listOfPositions = {}
     local listOfCards = {}
 
-    for _, snapPoint in ipairs(Global.getSnapPoints()) do
-        table.insert(listOfPositions, snapPoint.position)
-    end
-
     for _, object in ipairs(Global.getObjects()) do
-        for _, position in ipairs(listOfPositions) do
-            if(object.position == position) then
+        if(#listOfCards < maxHand) then
+            if(self.call("isObjectInLuigisHand",object)) then
                 table.insert(listOfCards, object)
             end
         end
@@ -52,6 +53,14 @@ function setLuigisHand()
     self.luigisHand = listOfCards
 end
 
+function isObjectInLuigisHand(object) do
+    for _, position in ipairs(luigisHandPositions) do
+        if(object.position == position) then
+            return true
+        end
+    end
+    return false
+end
 function getLuigisHand()
     if(#self.luigisHand = 0) then
         self.call("setLuigisHand")
