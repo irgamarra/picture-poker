@@ -1,0 +1,20 @@
+local maxHand = 5
+local deckObject
+
+function dealFiveToSeatedPlayers(deckObject)
+    for _,playerColor in ipairs(getSeatedPlayers()) do
+        deckObject.deal(maxHand, playerColor)
+    end
+end
+
+function fillHandToSeatedPlayers(deckObject)
+    for _,player in ipairs(getPlayers()) do
+        local handsCount = player.getHandCount()
+        local cardsToDeal = maxHand - handsCount
+        deckObject.deal(cardsToDeal, player.color)
+    end
+end
+
+function setDeckObject(deckObject)
+  self.deckObject = deckObject
+end
