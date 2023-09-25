@@ -43,12 +43,12 @@ end
 function getCoins()
   coins = 0
   for _, object in ipairs(coinScriptingZone.getAllObjects()) do
-    coins = coin + getCoinUnitOrStack(object)
+    coins = coin + getCoinNumber(object)
   end
   return coins
 end
 
-function getCoinUnitOrStack(object)
+function getCoinNumber(object)
   if(object.hasTag(coinTag)) then
     return 1
   end
