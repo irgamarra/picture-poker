@@ -78,8 +78,6 @@ function decideDiscards()
       insert(discards, cardWithoutMatches)
     end
   end
-
-  discardHand(discards)
 end
 
 -- index = valueOfCard, value = numberOfSimilarCards
