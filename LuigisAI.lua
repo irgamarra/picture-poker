@@ -91,7 +91,11 @@ function getDictOfCardMatches()
   local cardMatches = {}
   for index, card in ipairs(hand) do
     local valueOfCard = tostring(getValueOfCard(card))
-    cardMatches[valueOfCard] = getCardMatches(card, index)
+
+    if(cardMatches[valueOfCard] == nil) then
+      cardMatches[valueOfCard] = 1
+    end
+    cardMatches[valueOfCard] = cardMatches[valueOfCard] + getCardMatches(card, index)
   end
   return cardMatches
 end
