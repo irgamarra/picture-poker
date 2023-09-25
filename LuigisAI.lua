@@ -57,7 +57,7 @@ end
 
 function decideDiscards()
   local discards = {}
-  local cardMatches = getCardMatches() -- index = valueOfCard, value = numberOfMatches
+  local cardMatches = getDictOfCardMatches() -- index = valueOfCard, value = numberOfMatches
   local cardsWithoutMatches = {}
   
   for valueOfCard, numberOfMatches in pairs(cardMatches) do
@@ -76,11 +76,9 @@ function decideDiscards()
   
 end
 
-function getCardMatches()
+function getDictOfCardMatches()
   local cardMatches = {}
-  for cardToMatchIndex = 1, #hand do
-    local cardToMatch = hand[cardToMatchIndex]
-    
+  for cardToMatchIndex, cardToMatch, ipairs(hand) do
     for cardIndex, card in ipairs(hand) do
       if(cardIndex > cardToMatchIndex) then
         if(card.getName() == cardToMatch.getName()) then
