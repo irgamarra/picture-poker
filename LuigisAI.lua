@@ -11,6 +11,7 @@ function playTurn()
   setVariables()
   local cardsToDiscard = decideDiscards()
   discardHand(cardsToDiscard)
+  -- refillHand()
   
   table.exchangeBets()
 
