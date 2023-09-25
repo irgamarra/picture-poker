@@ -55,8 +55,10 @@ function getCardsOnTable()
 end
 
 function rateHand()
-    local cardMatches = getCardMatches()
-    
+  local cardMatches = getCardMatches() -- index = valueOfCard, value = numberOfMatches
+  for valueOfCard, numberOfMatches in pairs(cardMatches) do
+  
+  end
     -- pair
     
     -- trio
@@ -73,14 +75,26 @@ function getCardMatches()
     for cardIndex, card in ipairs(hand) do
       if(cardIndex > cardToMatchIndex) then
         if(card.getName() == cardToMatch.getName()) then
-            local valueOfCard = card.getName()[1] -- TODO: Does it work?
-
+          local valueOfCard = card.getName()[1] -- TODO: Does it work?
+          cardMatches = fillCardMatches({cardMatches = cardMatches, valueOfCard = card.getName()[valueOfCard]})
         end
       end
     end
-      
   end
-  return cardMatches{}
+  return cardMatches
+end
+
+function fillCardMatches(params)
+  local cardMatches = tonumber(params.cardMatches)
+  local valueOfCard = tostring(params.valueOfCard)
+  
+  if(cardMatches[valueOfCard] == nil)
+    cardMatches[valueOfCard] = 1 
+    return cardMatches
+  end
+  
+  cardMatches[valueOfCard] = cardMatches[valueOfCard] + 1
+  return cardMatches
 end
 
 function discardHand(cards)
