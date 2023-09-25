@@ -20,6 +20,7 @@ function playTurn()
   
 end
 
+-- TODO: Should this function be one loop?
 function setVariables()
   hand = getHand()
   cardsOnTable = getCardsOnTable()
