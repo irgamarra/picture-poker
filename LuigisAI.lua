@@ -3,6 +3,7 @@ local cardsOnTable = {}
 local coins = 0
 local handScriptingZone = ""
 local coinScriptingZone = ""
+local cardsTag = "Deck"
 
 function playTurn()
   setVariables()
@@ -28,7 +29,7 @@ end
 -- TODO:  Cards that do not belong to Luigi's hand shouldn't get inserted. Right now, they can
 function getHand()
   for _, object in ipairs(handScriptingZone.getAllObjects()) do
-    if(object.hasTag("Deck")) then
+    if(object.hasTag(cardsTag)) then
       insert(hand, object)
     end
   end
@@ -48,23 +49,42 @@ end
 
 function getCardsOnTable()
   for _, object in ipairs(getAllObjects()) do
-    if(object.hasTag("Deck")) then
+    if(object.hasTag(cardsTag)) then
       insert(cardsOnTable, object)
     end
   end
 end
 
-function rateHand()
+function decideDiscards()
+  local discards = {}
   local cardMatches = getCardMatches() -- index = valueOfCard, value = numberOfMatches
+  local cardsWithoutMatches = {}
+  
+  for valueOfCard, numberOfMatches in pairs(cardMatches) do
+    if(numberOfMatches == 1) then
+      insert(cardsWithoutMatches, valueOfCard)
+    end
+  end
+
+  for _, card in ipairs(hand) do
+    if(card.getName(1)) then 
+    end
+  end
+  rateHand(cardMatches)
+
+  
+end
+
+function rateHand(cardMatches)
   for valueOfCard, numberOfMatches in pairs(cardMatches) do
   
   end
-    -- pair
+    -- 1 = pair
     
-    -- trio
-    -- pair + trio
-    -- 4 of a kind
-    -- 5 of a kind
+    -- 2 = trio
+    -- 3 = pair + trio
+    -- 4 = 4 of a kind
+    -- 5 = 5 of a kind
 end
 
 function getCardMatches()
@@ -84,6 +104,9 @@ function getCardMatches()
   return cardMatches
 end
 
+function getValueOfCard(card)
+
+end
 function fillCardMatches(params)
   local cardMatches = tonumber(params.cardMatches)
   local valueOfCard = tostring(params.valueOfCard)
