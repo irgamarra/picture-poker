@@ -6,13 +6,6 @@ local maxHand = 5
 local luigisHandPositions = {}
 local luigisHand = {}
 
-function setVariables(params)
-    tableObject = params.tableObject
-    copiesOfEachCard = params.copiesOfEachCard
-    setLuigisHandPositions()
-end
-local copiesOfEachCard = 5
-local positionCardClonedOffsetZ = -4
 local deckBagObject = getObjectFromGUID("12fcbd")
 
 function setVariables(params)
