@@ -85,23 +85,31 @@ function decideDiscards()
     end
   end
   rateHand(cardMatches)
-
-  
 end
 
 function getDictOfCardMatches()
   local cardMatches = {}
-  for cardToMatchIndex, cardToMatch, ipairs(hand) do
-    for cardIndex, card in ipairs(hand) do
-      if(cardIndex > cardToMatchIndex) then
-        if(card.getName() == cardToMatch.getName()) then
-          local valueOfCard = getValueOfCard(card)
-          cardMatches = fillCardMatches(cardMatches, valueOfCard)
-        end
-      end
-    end
+  for index, card in ipairs(hand) do
+    local valueOfCard = tostring(getValueOfCard(card))
+    cardMatches[valueOfCard] = getCardMatches(card, index)
   end
   return cardMatches
+end
+
+function getValueOfCard(card)
+  return card.getName()[1] -- TODO: Does it work?
+end 
+
+function getCardMatches(card, index)  
+  local numberOfMatches = 0
+  
+  for indexToMatch, cardToMatch in ipairs(hand) do
+    if(indexToMatch > index and cardToMatch.getName() == card.getName()) then
+      numberOfMatches = numberOfMatcher + 1
+    end
+  end
+  
+  return numberOfMatches
 end
 
 function getCardsFromValue(hand, value)
@@ -126,21 +134,6 @@ function rateHand(cardMatches)
     -- 5 = 5 of a kind
 end
 
-function getValueOfCard(card)
-  return card.getName()[1] -- TODO: Does it work?
-end 
-function fillCardMatches(cardMatches, valueOfCard)
-  cardMatches = tonumber(cardMatches)
-  valueOfCard = tostring(valueOfCard)
-  
-  if(cardMatches[valueOfCard] == nil)
-    cardMatches[valueOfCard] = 1 
-    return cardMatches
-  end
-  
-  cardMatches[valueOfCard] = cardMatches[valueOfCard] + 1
-  return cardMatches
-end
 
 function discardHand(cards)
     if(cards == nil) then
