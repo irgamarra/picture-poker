@@ -97,7 +97,7 @@ function getDictOfCardMatches()
 end
 
 function getValueOfCard(card)
-  return card.getName()[1] -- TODO: Does it work?
+  return card.getName():sub(1, 1) -- TODO: Does it work?
 end 
 
 function getCardMatches(card, index)  
@@ -105,7 +105,7 @@ function getCardMatches(card, index)
   
   for indexToMatch, cardToMatch in ipairs(hand) do
     if(indexToMatch > index and cardToMatch.getName() == card.getName()) then
-      numberOfMatches = numberOfMatcher + 1
+      numberOfMatches = numberOfMatches + 1
     end
   end
   
