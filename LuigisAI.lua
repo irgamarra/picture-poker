@@ -71,20 +71,19 @@ end
 function decideDiscards()
   local discards = {}
   local cardMatches = getDictOfCardMatches()
-  local cardsWithoutMatches = {}
   
-  for valueOfCard, numberOfMatches in pairs(cardMatches) do
-    if(numberOfMatches == 1) then
-      local cardWithoutMatches = getCardsFromValue(hand, valueOfCard)[1]
-      insert(discards, cardsWithoutMatches)
+  for valueOfCard, cardsCount in pairs(cardMatches) do
+    if(cardsCount == 1) then
+      local cardWithoutMatches = getCardsFromValue(valueOfCard)[1]
+      insert(discards, cardWithoutMatches)
     end
   end
 
-  for _, card in ipairs(hand) do
-    if(getValueOfCard(card) == ) then 
-    end
-  end
-  rateHand(cardMatches)
+  -- for _, card in ipairs(hand) do
+  --   if(getValueOfCard(card) == ) then 
+  --   end
+  -- end
+  discardHand(discards)
 end
 
 -- index = valueOfCard, value = numberOfSimilarCards
@@ -117,7 +116,7 @@ function getCardMatches(card, index)
   return numberOfMatches
 end
 
-function getCardsFromValue(hand, value)
+function getCardsFromValue(value)
   local cards = {}
   for index,card in ipairs(hand) do
     if(getValueOfCard(card) == value) then
@@ -141,11 +140,12 @@ end
 
 
 function discardHand(cards)
-    if(cards == nil) then
-      return false
-    end
+  if(cards == nil) then
+    return false
+  end
+  for _, card in ipairs(cards) do
 
-    rateHand()
+  end
 end
 
 function lose()
