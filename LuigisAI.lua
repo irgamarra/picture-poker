@@ -62,17 +62,45 @@ function decideDiscards()
   
   for valueOfCard, numberOfMatches in pairs(cardMatches) do
     if(numberOfMatches == 1) then
-      insert(cardsWithoutMatches, valueOfCard)
+      local cardWithoutMatches = getCardsFromValue(hand, valueOfCard)[1]
+      insert(discards, cardsWithoutMatches)
     end
   end
 
   for _, card in ipairs(hand) do
-    if(card.getName(1)) then 
+    if(getValueOfCard(card) == ) then 
     end
   end
   rateHand(cardMatches)
 
   
+end
+
+function getCardMatches()
+  local cardMatches = {}
+  for cardToMatchIndex = 1, #hand do
+    local cardToMatch = hand[cardToMatchIndex]
+    
+    for cardIndex, card in ipairs(hand) do
+      if(cardIndex > cardToMatchIndex) then
+        if(card.getName() == cardToMatch.getName()) then
+          local valueOfCard = getValueOfCard(card)
+          cardMatches = fillCardMatches({cardMatches = cardMatches, valueOfCard = valueOfCard})
+        end
+      end
+    end
+  end
+  return cardMatches
+end
+
+function getCardsFromValue(hand, value)
+  local cards = {}
+  for index,card in ipairs(hand) do
+    if(getValueOfCard(card) == value) then
+      insert(cards,card)
+    end
+  end
+  return cards
 end
 
 function rateHand(cardMatches)
@@ -87,26 +115,9 @@ function rateHand(cardMatches)
     -- 5 = 5 of a kind
 end
 
-function getCardMatches()
-  local cardMatches = {}
-  for cardToMatchIndex = 1, #hand do
-    local cardToMatch = hand[cardToMatchIndex]
-    
-    for cardIndex, card in ipairs(hand) do
-      if(cardIndex > cardToMatchIndex) then
-        if(card.getName() == cardToMatch.getName()) then
-          local valueOfCard = card.getName()[1] -- TODO: Does it work?
-          cardMatches = fillCardMatches({cardMatches = cardMatches, valueOfCard = card.getName()[valueOfCard]})
-        end
-      end
-    end
-  end
-  return cardMatches
-end
-
 function getValueOfCard(card)
-
-end
+  return card.getName()[1] -- TODO: Does it work?
+end 
 function fillCardMatches(params)
   local cardMatches = tonumber(params.cardMatches)
   local valueOfCard = tostring(params.valueOfCard)
