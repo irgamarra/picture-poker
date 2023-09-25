@@ -10,7 +10,7 @@ local coinTag = "Coin"
 local coinStackName = "Coin stack"
 
 function playTurn()
-  setVariables()
+  setVariables({bagObject = bagObject})
   local cardsToDiscard = decideDiscards()
   discardHand(cardsToDiscard)
   -- refillHand()
