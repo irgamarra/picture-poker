@@ -79,10 +79,6 @@ function decideDiscards()
     end
   end
 
-  -- for _, card in ipairs(hand) do
-  --   if(getValueOfCard(card) == ) then 
-  --   end
-  -- end
   discardHand(discards)
 end
 
@@ -125,19 +121,6 @@ function getCardsFromValue(value)
   end
   return cards
 end
-
-function rateHand(cardMatches)
-  for valueOfCard, numberOfMatches in pairs(cardMatches) do
-  
-  end
-    -- 1 = pair
-    
-    -- 2 = trio
-    -- 3 = pair + trio
-    -- 4 = 4 of a kind
-    -- 5 = 5 of a kind
-end
-
 
 function discardHand(cards)
   if(cards == nil) then
