@@ -84,7 +84,7 @@ function getDictOfCardMatches()
       if(cardIndex > cardToMatchIndex) then
         if(card.getName() == cardToMatch.getName()) then
           local valueOfCard = getValueOfCard(card)
-          cardMatches = fillCardMatches({cardMatches = cardMatches, valueOfCard = valueOfCard})
+          cardMatches = fillCardMatches(cardMatches, valueOfCard)
         end
       end
     end
@@ -117,9 +117,9 @@ end
 function getValueOfCard(card)
   return card.getName()[1] -- TODO: Does it work?
 end 
-function fillCardMatches(params)
-  local cardMatches = tonumber(params.cardMatches)
-  local valueOfCard = tostring(params.valueOfCard)
+function fillCardMatches(cardMatches, valueOfCard)
+  cardMatches = tonumber(cardMatches)
+  valueOfCard = tostring(valueOfCard)
   
   if(cardMatches[valueOfCard] == nil)
     cardMatches[valueOfCard] = 1 
