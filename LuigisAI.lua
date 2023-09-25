@@ -70,7 +70,7 @@ end
 
 function decideDiscards()
   local discards = {}
-  local cardMatches = getDictOfCardMatches() -- index = valueOfCard, value = numberOfMatches
+  local cardMatches = getDictOfCardMatches()
   local cardsWithoutMatches = {}
   
   for valueOfCard, numberOfMatches in pairs(cardMatches) do
@@ -87,6 +87,7 @@ function decideDiscards()
   rateHand(cardMatches)
 end
 
+-- index = valueOfCard, value = numberOfMatches
 function getDictOfCardMatches()
   local cardMatches = {}
   for index, card in ipairs(hand) do
