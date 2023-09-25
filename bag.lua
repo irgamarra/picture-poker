@@ -72,11 +72,11 @@ function setLuigisHandPositions()
 end
 
 function getLuigisHand()
-    if(#self.luigisHand == 0) then
+    if(#luigisHand == 0) then
         self.call("setLuigisHand")
     end
 
-    return self.luigisHand
+    return luigisHand
 end
 
 function setLuigisHand()
@@ -90,7 +90,7 @@ function setLuigisHand()
         end
     end
 
-    self.luigisHand = listOfCards
+    luigisHand = listOfCards
 end
 
 function isObjectInLuigisHand(object)
