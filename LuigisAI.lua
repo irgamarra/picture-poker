@@ -67,13 +67,15 @@ end
 
 function getCardMatches()
   local cardMatches = {}
-  for cardToMatchIndex = 1 in #hand do
+  for cardToMatchIndex = 1, #hand do
     local cardToMatch = hand[cardToMatchIndex]
-      
+    
     for cardIndex, card in ipairs(hand) do
       if(cardIndex > cardToMatchIndex) then
-        local valueOfCard = card.GetName()[1] -- TODO: Does it work?
-        
+        if(card.getName() == cardToMatch.getName()) then
+            local valueOfCard = card.getName()[1] -- TODO: Does it work?
+
+        end
       end
     end
       
