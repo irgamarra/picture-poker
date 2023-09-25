@@ -1,4 +1,5 @@
 local hand = {}
+-- Should we use bag.getLuigisHand() ??
 local cardsOnTable = {}
 local coins = 0
 local handScriptingZone = ""
