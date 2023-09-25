@@ -9,7 +9,7 @@ local luigisHand = {}
 function setVariables(params)
     tableObject = params.tableObject
     copiesOfEachCard = params.copiesOfEachCard
-    self.call("setLuigisHandPositions")
+    setLuigisHandPositions()
 end
 local copiesOfEachCard = 5
 local positionCardClonedOffsetZ = -4
@@ -18,7 +18,7 @@ local deckBagObject = getObjectFromGUID("12fcbd")
 function setVariables(params)
     tableObject = params.tableObject
     copiesOfEachCard = params.copiesOfEachCard
-    self.call("setLuigisHandPositions")
+    setLuigisHandPositions()
 end
 
 function buildDeck()
@@ -73,7 +73,7 @@ end
 
 function getLuigisHand()
     if(#luigisHand == 0) then
-        self.call("setLuigisHand")
+        setLuigisHand()
     end
 
     return luigisHand
@@ -83,10 +83,11 @@ function setLuigisHand()
     local listOfCards = {}
 
     for _, object in ipairs(Global.getObjects()) do
-        if(#listOfCards < maxHand) then
-            if(self.call("isObjectInLuigisHand",object)) then
-                table.insert(listOfCards, object)
-            end
+        if(#listOfCards == maxHand) then
+            break
+        end
+        if(isObjectInLuigisHand(object)) then
+            table.insert(listOfCards, object)
         end
     end
 
