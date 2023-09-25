@@ -43,14 +43,19 @@ end
 function getCoins()
   coins = 0
   for _, object in ipairs(coinScriptingZone.getAllObjects()) do
-    if(object.hasTag(coinTag)) then
-      coins = coins + 1
-    end
-    if (object.name == coinStackName) then
-      coins = coins + #object.getAllObjects()
-    end
+    coins = coin + getCoinUnitOrStack(object)
   end
   return coins
+end
+
+function getCoinUnitOrStack(object)
+  if(object.hasTag(coinTag)) then
+    return 1
+  end
+  if (object.name == coinStackName) then
+    return #object.getAllObjects()
+  end
+  return 0
 end
 
 function getCardsOnTable()
