@@ -9,6 +9,7 @@ function setVariables()
   coins = getCoins()
 end
 
+-- TODO:  Cards that do not belong to Luigi's hand shouldn't get inserted. Right now, they can
 function getHand()
   for _, object in ipairs(handScriptingZone.getAllObjects()) do
     if(object.hasTag("Deck")) then
@@ -16,6 +17,19 @@ function getHand()
     end
   end
 end
+
+function getCoins()
+  coins = 0
+  for _, object in ipairs(coinScriptingZone.getAllObjects()) do
+    if(object.hasTag("Coin")) then
+      coins = coins + 1
+    end
+    if (object.name == "Coin stack") then
+      coins = coins + #object.getAllObjects()
+    end
+  end
+end
+
 function getDiscards()
   for _, object in ipairs(getAllObjects()) do
     if(object.hasTag("Deck")) then
