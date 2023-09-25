@@ -78,6 +78,7 @@ function decideDiscards()
       insert(discards, cardWithoutMatches)
     end
   end
+  return discards
 end
 
 -- index = valueOfCard, value = numberOfSimilarCards
