@@ -4,6 +4,8 @@ local coins = 0
 local handScriptingZone = ""
 local coinScriptingZone = ""
 local cardsTag = "Deck"
+local coinTag = "Coin"
+local coinStackName = "Coin stack"
 
 function playTurn()
   setVariables()
@@ -29,31 +31,36 @@ end
 
 -- TODO:  Cards that do not belong to Luigi's hand shouldn't get inserted. Right now, they can
 function getHand()
+  hand = {}
   for _, object in ipairs(handScriptingZone.getAllObjects()) do
     if(object.hasTag(cardsTag)) then
       insert(hand, object)
     end
   end
+  return hand
 end
 
 function getCoins()
   coins = 0
   for _, object in ipairs(coinScriptingZone.getAllObjects()) do
-    if(object.hasTag("Coin")) then
+    if(object.hasTag(coinTag)) then
       coins = coins + 1
     end
-    if (object.name == "Coin stack") then
+    if (object.name == coinStackName) then
       coins = coins + #object.getAllObjects()
     end
   end
+  return coins
 end
 
 function getCardsOnTable()
+  cardOnTable = {}
   for _, object in ipairs(getAllObjects()) do
     if(object.hasTag(cardsTag)) then
       insert(cardsOnTable, object)
     end
   end
+  return cardsOnTable
 end
 
 function decideDiscards()
