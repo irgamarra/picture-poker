@@ -1,5 +1,6 @@
 local hand = {}
 -- Should we use bag.getLuigisHand() ??
+local bagObject = {}
 local cardsOnTable = {}
 local coins = 0
 local handScriptingZone = ""
@@ -25,7 +26,8 @@ function playTurn()
 end
 
 -- TODO: Should this function be one loop?
-function setVariables()
+function setVariables(params)
+  params.bagObject = bagObject
   hand = getHand()
   cardsOnTable = getCardsOnTable()
   coins = getCoins()
@@ -39,6 +41,7 @@ function getHand()
       insert(hand, object)
     end
   end
+  -- return bagObject.getLuigisHand() ??
   return hand
 end
 
