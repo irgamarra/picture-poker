@@ -87,7 +87,7 @@ function decideDiscards()
   rateHand(cardMatches)
 end
 
--- index = valueOfCard, value = numberOfMatches
+-- index = valueOfCard, value = numberOfSimilarCards
 function getDictOfCardMatches()
   local cardMatches = {}
   for index, card in ipairs(hand) do
