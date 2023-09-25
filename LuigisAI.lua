@@ -1,11 +1,27 @@
 local hand = {}
-local discards = {}
+local cardsOnTable = {}
 local coins = 0
 local handScriptingZone = ""
+local coinScriptingZone = ""
+
+function playTurn()
+  setVariables()
+  local cardsToDiscard = decideDiscards()
+  discardHand(cardsToDiscard)
+  
+  table.exchangeBets()
+
+  -- TODO: Table should do lose/win conditions, maybe??
+  getCoins()
+  if(coins == 0) then
+    lose()
+  end
+  
+end
 
 function setVariables()
   hand = getHand()
-  discards = getDiscards()
+  cardsOnTable = getCardsOnTable()
   coins = getCoins()
 end
 
@@ -30,16 +46,48 @@ function getCoins()
   end
 end
 
-function getDiscards()
+function getCardsOnTable()
   for _, object in ipairs(getAllObjects()) do
     if(object.hasTag("Deck")) then
-      insert(discards, object)
+      insert(cardsOnTable, object)
     end
   end
 end
 
 function rateHand()
+    local cardMatches = getCardMatches()
+    
+    -- pair
+    
+    -- trio
+    -- pair + trio
+    -- 4 of a kind
+    -- 5 of a kind
 end
 
-function discardHand()
+function getCardMatches()
+  local cardMatches = {}
+  for cardToMatchIndex = 1 in #hand do
+    local cardToMatch = hand[cardToMatchIndex]
+      
+    for cardIndex, card in ipairs(hand) do
+      if(cardIndex > cardToMatchIndex) then
+        local valueOfCard = card.GetName()[1] -- TODO: Does it work?
+        
+      end
+    end
+      
+  end
+  return cardMatches{}
+end
+
+function discardHand(cards)
+    if(cards == nil) then
+      return false
+    end
+
+    rateHand()
+end
+
+function lose()
 end
