@@ -131,7 +131,6 @@ function discardHand(cards)
   if(cards == nil) then
     return false
   end
-  
   for _, card in ipairs(cards) do
     card.setPositionSmoot(discardZone.getPosition(), false, false)
   end
