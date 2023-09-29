@@ -132,7 +132,7 @@ function discardHand(cards)
     return false
   end
   for _, card in ipairs(cards) do
-    card.setPositionSmoot(discardZone.getPosition(), false, false)
+    card.setPositionSmooth(discardZone.getPosition(), false, false)
   end
 end
 
