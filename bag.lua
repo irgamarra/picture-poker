@@ -17,7 +17,7 @@ end
 function buildDeck()
     for _, card in ipairs(self.getObjects()) do
         local cardObject = self.takeObject({guid = card.guid})
-        -- Clean code suggestion, the for loop should be inside this function: deckBagObject.putCards(copiesOfEachCard, cardObject.clone())
+        -- Clean code suggestion, the for loop should be inside this function: deckBagObject.call("putCards",{copies = copiesOfEachCard, card = cardObject.clone()})
         for i = 1, copiesOfEachCard do
             local cardClone = cardObject.clone()
             deckBagObject.putObject(cardClone)
