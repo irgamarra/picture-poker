@@ -8,6 +8,7 @@ local coinScriptingZone = ""
 local cardsTag = "Deck"
 local coinTag = "Coin"
 local coinStackName = "Coin stack"
+local discardZone = ""
 
 function playTurn()
   setVariables({bagObject = bagObject})
@@ -130,8 +131,9 @@ function discardHand(cards)
   if(cards == nil) then
     return false
   end
+  
   for _, card in ipairs(cards) do
-
+    card.setPositionSmoot(discardZone.getPosition(), false, false)
   end
 end
 
