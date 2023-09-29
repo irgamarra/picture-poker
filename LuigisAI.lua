@@ -53,6 +53,7 @@ function getHand()
   return hand
 end
 
+-- TODO: tableObject.getLuigisCoins()
 function getCoins()
   coins = 0
   for _, object in ipairs(coinScriptingZone.getAllObjects()) do
