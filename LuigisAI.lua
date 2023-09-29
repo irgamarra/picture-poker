@@ -3,8 +3,6 @@ local bagObject = {}
 local tableObject = {}
 
 -- local zones = "" -- object for all zones
-
-local cardsOnTable = {}
 local coins = 0
 
 local cardsTag = "Deck"
@@ -18,14 +16,13 @@ function setVariables(params)
   zones = params.zones
   
   hand = getHand()
-  cardsOnTable = getCardsOnTable()
   coins = getCoins()
 end
 
 function playTurn()
   setVariables({bagObject = bagObject})
   local cardsToDiscard = decideDiscards()
-  discardHand(cardsToDiscard)
+  discardCards(cardsToDiscard)
   -- TODO: tableObject.refillHand()
   
   tableObject.exchangeBets()
@@ -130,7 +127,7 @@ function getCardsFromValue(value)
   return cards
 end
 
-function discardHand(cards)
+function discardCards(cards)
   if(cards == nil) then
     return false
   end
