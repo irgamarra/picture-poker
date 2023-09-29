@@ -43,7 +43,7 @@ end
 -- TODO: Should we use tableObject.getLuigisHand() ??
 function getHand()
   hand = {}
-  for _, object in ipairs(zones.handScriptingZone.getAllObjects()) do
+  for _, object in ipairs(zones.handScriptingZone.getObjects()) do
     if(object.hasTag(cardsTag)) then
       insert(hand, object)
     end
@@ -55,7 +55,7 @@ end
 -- TODO: tableObject.getLuigisCoins()
 function getCoins()
   coins = 0
-  for _, object in ipairs(zones.coinScriptingZone.getAllObjects()) do
+  for _, object in ipairs(zones.coinScriptingZone.getObjects()) do
     coins = coin + getCoinNumber(object)
   end
   return coins
@@ -66,7 +66,7 @@ function getCoinNumber(coin)
     return 1
   end
   if (coin.name == coinStackName) then
-    return #object.getAllObjects()
+    return #object.getObjects()
   end
   return 0
 end
@@ -74,7 +74,7 @@ end
 -- TODO: put this function inside Table
 function getCardsOnTable()
   cardOnTable = {}
-  for _, object in ipairs(getAllObjects()) do
+  for _, object in ipairs(getObjects()) do
     if(object.hasTag(cardsTag)) then
       insert(cardsOnTable, object)
     end
