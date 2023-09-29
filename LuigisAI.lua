@@ -2,9 +2,10 @@ local hand = {}
 local bagObject = {}
 local tableObject = {}
 
-local handScriptingZone = ""
-local coinScriptingZone = ""
-local discardZone = ""
+-- local zones = "" -- object for all zones
+local handScriptingZone = "" -- zones.luigisHand
+local coinScriptingZone = "" -- zones.coins
+local discardZone = "" -- zones.discard
 
 local cardsOnTable = {}
 local coins = 0
@@ -13,23 +14,6 @@ local cardsTag = "Deck"
 local coinTag = "Coin"
 local coinStackName = "Coin stack"
 
-function playTurn()
-  setVariables({bagObject = bagObject})
-  local cardsToDiscard = decideDiscards()
-  discardHand(cardsToDiscard)
-  -- refillHand()
-  
-  table.exchangeBets()
-
-  -- TODO: Table should do lose/win conditions, maybe??
-  getCoins()
-  if(coins == 0) then
-    lose()
-  end
-  
-end
-
--- TODO: Should this function be one loop?
 function setVariables(params)
   bagObject = params.bagObject
   discardZone = params.discardZone
@@ -38,6 +22,23 @@ function setVariables(params)
   hand = getHand()
   cardsOnTable = getCardsOnTable()
   coins = getCoins()
+end
+
+function playTurn()
+  setVariables({bagObject = bagObject})
+  local cardsToDiscard = decideDiscards()
+  discardHand(cardsToDiscard)
+  -- TODO: tableObject.refillHand()
+  
+  tableObject.exchangeBets()
+
+  -- TODO: tableObject.getLuigisCoins()
+  getCoins()
+  -- TODO: tableObject.winLoseCondition() ??
+  if(coins == 0) then
+    lose()
+  end
+  
 end
 
 -- TODO:  Cards that do not belong to Luigi's hand shouldn't get inserted. Right now, they can
@@ -62,11 +63,11 @@ function getCoins()
   return coins
 end
 
-function getCoinNumber(object)
-  if(object.hasTag(coinTag)) then
+function getCoinNumber(coin)
+  if(coin.hasTag(coinTag)) then
     return 1
   end
-  if (object.name == coinStackName) then
+  if (coin.name == coinStackName) then
     return #object.getAllObjects()
   end
   return 0
