@@ -17,6 +17,7 @@ end
 function buildDeck()
     for _, card in ipairs(self.getObjects()) do
         local cardObject = self.takeObject({guid = card.guid})
+        -- bagDeck.putCards(copiesOfEachCard, cardObject.clone())
         for i = 1, copiesOfEachCard do
             local cardClone = cardObject.clone()
             deckBagObject.putObject(cardClone)
