@@ -3,9 +3,6 @@ local bagObject = {}
 local tableObject = {}
 
 -- local zones = "" -- object for all zones
-local handScriptingZone = "" -- zones.luigisHand
-local coinScriptingZone = "" -- zones.coins
-local discardZone = "" -- zones.discard
 
 local cardsOnTable = {}
 local coins = 0
@@ -16,8 +13,9 @@ local coinStackName = "Coin stack"
 
 function setVariables(params)
   bagObject = params.bagObject
-  discardZone = params.discardZone
   tableObject = params.tableObject
+  
+  zones = params.zones
   
   hand = getHand()
   cardsOnTable = getCardsOnTable()
@@ -45,7 +43,7 @@ end
 -- TODO: Should we use tableObject.getLuigisHand() ??
 function getHand()
   hand = {}
-  for _, object in ipairs(handScriptingZone.getAllObjects()) do
+  for _, object in ipairs(zones.handScriptingZone.getAllObjects()) do
     if(object.hasTag(cardsTag)) then
       insert(hand, object)
     end
@@ -57,7 +55,7 @@ end
 -- TODO: tableObject.getLuigisCoins()
 function getCoins()
   coins = 0
-  for _, object in ipairs(coinScriptingZone.getAllObjects()) do
+  for _, object in ipairs(zones.coinScriptingZone.getAllObjects()) do
     coins = coin + getCoinNumber(object)
   end
   return coins
@@ -150,7 +148,7 @@ function discardHand(cards)
     return false
   end
   for _, card in ipairs(cards) do
-    card.setPositionSmooth(discardZone.getPosition(), false, false)
+    card.setPositionSmooth(zones.discardZone.getPosition(), false, false)
   end
 end
 
