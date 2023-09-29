@@ -42,14 +42,7 @@ end
 -- TODO:  Cards that do not belong to Luigi's hand shouldn't get inserted. Right now, they can
 -- TODO: Should we use tableObject.getLuigisHand() ??
 function getHand()
-  hand = {}
-  for _, object in ipairs(zones.handScriptingZone.getObjects()) do
-    if(object.hasTag(cardsTag)) then
-      insert(hand, object)
-    end
-  end
-  -- return bagObject.getLuigisHand() ??
-  return hand
+  return zones.handScriptingZone.getObjectsWithTag(cardsTag)
 end
 
 -- TODO: tableObject.getLuigisCoins()
@@ -73,13 +66,7 @@ end
 
 -- TODO: put this function inside Table
 function getCardsOnTable()
-  cardOnTable = {}
-  for _, object in ipairs(getObjects()) do
-    if(object.hasTag(cardsTag)) then
-      insert(cardsOnTable, object)
-    end
-  end
-  return cardsOnTable
+  return getObjectsWithTag(cardsTag)
 end
 
 function decideDiscards()
