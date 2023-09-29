@@ -15,7 +15,6 @@ function setVariables(params)
 end
 
 function buildDeck()
-    local positionCardCloned = self.getPosition()
     for _, card in ipairs(self.getObjects()) do
         local cardObject = self.takeObject({guid = card.guid})
         for i = 1, copiesOfEachCard do
