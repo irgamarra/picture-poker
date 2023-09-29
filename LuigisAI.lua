@@ -1,14 +1,17 @@
 local hand = {}
--- Should we use bag.getLuigisHand() ??
 local bagObject = {}
-local cardsOnTable = {}
-local coins = 0
+local tableObject = {}
+
 local handScriptingZone = ""
 local coinScriptingZone = ""
+local discardZone = ""
+
+local cardsOnTable = {}
+local coins = 0
+
 local cardsTag = "Deck"
 local coinTag = "Coin"
 local coinStackName = "Coin stack"
-local discardZone = ""
 
 function playTurn()
   setVariables({bagObject = bagObject})
@@ -28,13 +31,17 @@ end
 
 -- TODO: Should this function be one loop?
 function setVariables(params)
-  params.bagObject = bagObject
+  bagObject = params.bagObject
+  discardZone = params.discardZone
+  tableObject = params.tableObject
+  
   hand = getHand()
   cardsOnTable = getCardsOnTable()
   coins = getCoins()
 end
 
 -- TODO:  Cards that do not belong to Luigi's hand shouldn't get inserted. Right now, they can
+-- TODO: Should we use tableObject.getLuigisHand() ??
 function getHand()
   hand = {}
   for _, object in ipairs(handScriptingZone.getAllObjects()) do
@@ -64,6 +71,7 @@ function getCoinNumber(object)
   return 0
 end
 
+-- TODO: put this function inside Table
 function getCardsOnTable()
   cardOnTable = {}
   for _, object in ipairs(getAllObjects()) do
@@ -96,7 +104,7 @@ function getDictOfCardMatches()
     if(cardMatches[valueOfCard] == nil) then
       cardMatches[valueOfCard] = 1
     end
-    cardMatches[valueOfCard] = cardMatches[valueOfCard] + getCardMatches(card, index)
+    cardMatches[valueOfCard] = cardMatches[valueOfCard] + getCardMatchesToTheRight(card, index)
   end
   return cardMatches
 end
@@ -105,16 +113,24 @@ function getValueOfCard(card)
   return card.getName():sub(1, 1) -- TODO: Does it work?
 end 
 
-function getCardMatches(card, index)  
+function getCardMatchesToTheRight(card, outerIndex)  
   local numberOfMatches = 0
   
-  for indexToMatch, cardToMatch in ipairs(hand) do
-    if(indexToMatch > index and cardToMatch.getName() == card.getName()) then
-      numberOfMatches = numberOfMatches + 1
+  for innerIndex, cardToMatch in ipairs(hand) do
+    if(innerIndex > outerIndex) then
+      numberOfMatches = numberOfMatches + cardMatched(cardToMatch, card)
     end
   end
   
   return numberOfMatches
+end
+
+-- TODO: put this function in the object Table
+function cardMatched(card, cardToMatch)
+  if(cardToMatch.getName() == card.getName()) then
+      return 1
+  end
+  return 0
 end
 
 function getCardsFromValue(value)
