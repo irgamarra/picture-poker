@@ -1,5 +1,10 @@
 local oneCoinBag = getObjectFromGUID("49a549")
 local deckBagObject = getObjectFromGUID("12fcbd")
+local zones = {}
+
+function setVariables(params)
+    zones = params.zones
+end
 
 function deleteAllCards(tag)
     for _, object in pairs(getAllObjects()) do
@@ -30,20 +35,41 @@ function giveCoinsToAll(number)
 end
 
 function giveCoinsToPlayer(playerColor, numberOfCoins)
-    local bucketTag = playerColor .. " coins bucket"
+    local bucket = getObjectFromGUID(zones.coinZonesGUID[playerColor])
     
-    for _, object in pairs(getAllObjects()) do
-        
-        if object.getName() == bucketTag then
-            for i = 1, numberOfCoins do
-                local coin = oneCoinBag.takeObject()
-                coin.setPosition(object.getPosition())
-            end             
-        end
+    for i = 1, numberOfCoins do
+        local coin = oneCoinBag.takeObject()
+        coin.setPosition(bucket.getPosition())
+    end 
+end
 
+function bet(playerColor)
+    local bucket = getObjectFromGUID(zones.coinZonesGUID[playerColor])
+    local betZone = getObjectFromGUID(zones.betZonesGUID[playerColor])
+
+    for _, object in ipairs(bucket.getObjects()) do
+        
+        -- TODO: move stack or unit function
+        if(object.name == "Custom_Token_Stack") then
+            object.takeObject({
+                position = betZone.getPosition()
+            })
+        end
+        if(object.name == "Custom_Token") then
+            object.setPositionSmooth(betZone.getPosition(), false, false) 
+        end
     end
 end
-    
+
+-- function startGameBet(waitForCoinStack)
+--     function waitForCoinStack()
+--         while
+--     end
+--     if (waitForCoinsStack) then
+--         startLuaCoroutine(self, waitForCoinStack)
+--     end
+-- end
+
 function stackObjects(params)
     function coinside()
         waitFrames(1)

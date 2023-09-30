@@ -26,8 +26,12 @@ function buildDeck()
     end
 end
 
-function dealToLuigi()
-    for _, position in ipairs(luigisHandPositions) do
+function dealToLuigi(positions)
+    if (positions == nil) then
+        positions = getLuigisHandPositions()
+    end
+    
+    for _, position in ipairs(positions) do
         deckBagObject.takeObject({
             position = position,
         })
@@ -62,6 +66,13 @@ function setLuigisHandPositions()
             table.insert(luigisHandPositions, snapPoint.position)
         end
     end
+end
+
+function getLuigisHandPositions()
+    if(luigisHandPositions == nil) then
+        setLuigisHandPositions()
+    end
+    return luigisHandPositions
 end
 
 function getLuigisHand()

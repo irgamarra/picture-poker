@@ -2,6 +2,9 @@ local startingCoins = 10
 local copiesOfEachCard = 5
 local maxHand = 5
 
+local buttonDiscardID = "Discard"
+local buttonBetID = "Bet"
+
 local tagForCards = "Poker card"
 local bagGUID = "a0ed74"
 local luigiGUID = "3d45b3"
@@ -13,8 +16,16 @@ local zones = {
     luigisHand = {},
     luigisCoins = {},
     discardZone = {},
+    betZonesGUID = {},
+    coinZonesGUID = {},
 }
 
+local betZonesGUID = {
+    White = "e4b599",
+}
+local coinZonesGUID = {
+    White = "e2380e"
+}
 local gameObjects = {
     bagOfCards = {},
     luigi = {},
@@ -40,7 +51,10 @@ end
 function getZones()
     zones.luigisHand = getObjectFromGUID('116688')
     zones.discardZone = getObjectFromGUID(discardZoneGUID)
+    zones.betZonesGUID = betZonesGUID
+    zones.coinZonesGUID = coinZonesGUID
 end
+
 function setVariablesOfGameObjects()
     local params = {
         startingCoins = startingCoins,
@@ -51,8 +65,15 @@ function setVariablesOfGameObjects()
         maxHand = maxHand,
     }
     gameObjects.turn.call("setVariables", bagGUID)
+    
+    -- TODO: Make it work
+    -- for key,gameObject in ipairs(gameObjects) do
+    --     gameObject.call("setVariables", params)
+    -- end
+
     gameObjects.bagOfCards.call("setVariables", params)
     gameObjects.luigi.call("setVariables", params)
+    gameObjects.table.call("setVariables", params)
 end
 
 function startButton()
@@ -61,19 +82,27 @@ function startButton()
     gameObjects.bagOfCards.call("buildDeck")
     gameObjects.table.call("giveCoinsToAll", startingCoins)
     gameObjects.bagOfCards.call("dealFiveToSeatedPlayers")
-    --self.UI.show("Discard")
-    visibilityToAllSeatedColors()
+    --gameObjects.table.call("startGameBet", true)
+    
+    UIVisibilityToAllSeatedColors(buttonDiscardID)
+    UIVisibilityToAllSeatedColors(buttonBetID)
 end
 
 function nextTurn()
     gameObjects.table.call("deleteAllCards", tagForCards)
     gameObjects.bagOfCards.call("buildDeck")
     gameObjects.bagOfCards.call("dealFiveToSeatedPlayers")
-    visibilityToAllSeatedColors()
+    UIVisibilityToAllSeatedColors(buttonDiscardID)
 end
 
 function discard(player_clicker)
-    hideVisibilityForColor(player_clicker.color)
+    local betZone = getObjectFromGUID(zones.betZonesGUID[player_clicker.color])
+    if(#betZone.getObjects() < 1) then
+        print(player_clicker.color.." please make a bet first")
+        return false
+    end
+    hideUIVisibilityForColor(player_clicker.color, buttonDiscardID)
+    hideUIVisibilityForColor(player_clicker.color, buttonBetID)
     discardCount = discardCount + 1
     gameObjects.bagOfCards.call("fillHandOfPlayer", player_clicker)
 
@@ -81,17 +110,23 @@ function discard(player_clicker)
         gameObjects.luigi.call("playTurn")
         discardCount = 0
     end
+
+    return true
 end
 
-function visibilityToAllSeatedColors()
+function bet(player_clicker)
+    gameObjects.table.call("bet", player_clicker.color)
+end
+
+function UIVisibilityToAllSeatedColors(id)
     local visibility = ""
     for _, playerColor in ipairs(getSeatedPlayers()) do
         visibility = visibility .. "|" .. playerColor
     end
-    UI.setAttribute("Discard", "visibility", visibility)
+    UI.setAttribute(id, "visibility", visibility)
 end
 
-function hideVisibilityForColor(playerColor)
+function hideUIVisibilityForColor(playerColor, id)
     local currentVisibility = self.UI.getAttribute("Discard", "visibility")
     local colors = currentVisibility:split("|")
     local newVisibility = ""
@@ -107,7 +142,7 @@ function hideVisibilityForColor(playerColor)
     if(newVisibility == "") then
         newVisibility = "0"
     end
-    UI.setAttribute("Discard", "visibility", newVisibility)
+    UI.setAttribute(id, "visibility", newVisibility)
 end
 
 function string:split(delimiter)

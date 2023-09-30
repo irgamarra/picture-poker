@@ -3,10 +3,9 @@
 </Defaults>
 <Panel name="VerticalButtonPanel" width="10%" padding="0 10 800 200"
 rectAlignment="Center" >
-    <VerticalLayout name="VerticalLayout" spacing="50">
-        <!-- <Button onClick="startButton" text="Start game"/>
-        <Button onClick="drawButton" text="Draw"/>
-        <Button onClick="test" text="Test"/> -->
-        <Button id="Discard" onClick="discard" text="Discard" visibility="0"/>
-    </VerticalLayout>
+        <Button id="Discard" onClick="discard" text="Hold" visibility="0"/>
 </Panel>
+<Button id="Bet" 
+width="10%" offsetXY="-400 100"
+rectAlignment="LowerRight"
+onClick="bet" text="Bet" visibility="0"/>

@@ -19,7 +19,6 @@ function setVariables(params)
 end
 
 function playTurn()
-    --gameObjects.bagOfCards.call("dealToLuigi")
     local dealToLuigi = function() gameObjects.bagOfCards.call("dealToLuigi") end
     Wait.time( dealToLuigi, dealToLuigiWaitSeconds)
     --coins = getCoins()
@@ -158,12 +157,24 @@ function discardCards(cards)
     if(cards == nil) then
         return false
     end
+    -- TODO: take out anonymous functions and make a function to call them.
+    local cardsDiscardedPosition = {}
+
     local waitSecondsForEachDiscard = discardAnimationSeconds
     for _, card in ipairs(cards) do
-        local discard = function () card.setPositionSmooth(zones.discardZone.getPosition(), false, false) end
+        
+        local discard = function () 
+            table.insert(cardsDiscardedPosition, card.getPosition()) 
+            card.setPositionSmooth(zones.discardZone.getPosition(), false, false) 
+        end
+
         waitSecondsForEachDiscard = waitSecondsForEachDiscard + discardAnimationSeconds
         Wait.time(discard, waitSecondsForEachDiscard)
     end
+    
+    local refillHand = function () gameObjects.bagOfCards.call("dealToLuigi", cardsDiscardedPosition) end
+    Wait.time(refillHand, waitSecondsForEachDiscard)
+
     return true
 end
 
