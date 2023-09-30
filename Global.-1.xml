@@ -1,0 +1,12 @@
+<Defaults>
+    <Button width="100" height="100" fontSize="20"/>
+</Defaults>
+<Panel name="VerticalButtonPanel" width="10%" padding="0 10 800 200"
+rectAlignment="Center" >
+    <VerticalLayout name="VerticalLayout" spacing="50">
+        <!-- <Button onClick="startButton" text="Start game"/>
+        <Button onClick="drawButton" text="Draw"/>
+        <Button onClick="test" text="Test"/> -->
+        <Button id="Discard" onClick="discard" text="Discard" visibility="0"/>
+    </VerticalLayout>
+</Panel>
