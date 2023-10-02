@@ -21,18 +21,26 @@ end
 function playTurn()
     local dealToLuigi = function() gameObjects.bagOfCards.call("dealToLuigi") end
     Wait.time( dealToLuigi, dealToLuigiWaitSeconds)
-    --coins = getCoins()
     waitForHand(discardPhase)  
-
+    -- TODO: rateHandsPhase()
 end
 
 function discardPhase()
     local cardsToDiscard = decideDiscards()
+
+    local waitSecondsForEachFunction = discardAnimationSeconds
+    local cardsDiscardedPositions = discardCards(cardsToDiscard, waitSecondsForEachFunction)
     
-    discardCards(cardsToDiscard)
+    waitSecondsForEachFunction = waitSecondsForEachFunction * #cardsToDiscard
+    refillHand(cardsDiscardedPositions, waitSecondsForEachFunction)
     
-    -- TODO: gameObjects.tableObject.refillHand()
-    -- gameObjects.tableObject.exchangeBets()
+    waitSecondsForEachFunction = waitSecondsForEachFunction + 1
+    rateHandsPhase(waitSecondsForEachFunction)
+end
+
+function rateHandsPhase(waitSeconds)
+    local waitSecondsForEachFunction = gameObjects.tableObject.call("exchangeBets", waitSeconds)
+    
     -- TODO: gameObjects.tableObject.getLuigisCoins()
     --getCoins()
     -- TODO: gameObjects.tableObject.winLoseCondition() ??
@@ -40,6 +48,7 @@ function discardPhase()
         lose()
     end
 end
+
 -- TODO:  Cards that do not belong to Luigi's hand shouldn't get inserted. Right now, they can
 -- TODO: Should we use gameObjects.tableObject.getLuigisHand() ??
 function waitForHand(func)
@@ -56,6 +65,7 @@ function waitForHand(func)
     startLuaCoroutine(self, "innerCoroutine")
     
 end
+
 function getHand()
     hand = {}
     for _, object in ipairs(zones.luigisHand.getObjects()) do
@@ -153,29 +163,34 @@ function getCardsFromValue(value)
     return cards
 end
 
-function discardCards(cards)
+function discardCards(cards, waitSeconds)
     if(cards == nil) then
-        return false
+        return nil
     end
-    -- TODO: take out anonymous functions and make a function to call them.
-    local cardsDiscardedPosition = {}
+    
+    local cardsDiscardedPositions = {}
 
-    local waitSecondsForEachDiscard = discardAnimationSeconds
+    local waitSecondsForEachDiscard = waitSeconds
     for _, card in ipairs(cards) do
         
         local discard = function () 
-            table.insert(cardsDiscardedPosition, card.getPosition()) 
+            table.insert(cardsDiscardedPositions, card.getPosition()) 
             card.setPositionSmooth(zones.discardZone.getPosition(), false, false) 
         end
 
-        waitSecondsForEachDiscard = waitSecondsForEachDiscard + discardAnimationSeconds
+        waitSecondsForEachDiscard = waitSecondsForEachDiscard + waitSeconds
         Wait.time(discard, waitSecondsForEachDiscard)
     end
     
-    local refillHand = function () gameObjects.bagOfCards.call("dealToLuigi", cardsDiscardedPosition) end
-    Wait.time(refillHand, waitSecondsForEachDiscard)
+    -- local refillHand = function () gameObjects.bagOfCards.call("dealToLuigi", cardsDiscardedPositions) end
+    -- Wait.time(refillHand, waitSecondsForEachDiscard)
 
-    return true
+    return cardsDiscardedPositions
+end
+
+function refillHand(cardsDiscardedPositions, waitSeconds)
+    local refillHand = function () gameObjects.bagOfCards.call("dealToLuigi", cardsDiscardedPositions) end
+    Wait.time(refillHand, waitSeconds)
 end
 
 function lose()
