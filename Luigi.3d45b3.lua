@@ -102,7 +102,7 @@ end
 
 function decideDiscards()
     local discards = {}
-    local cardMatches = getDictOfCardMatches()
+    local cardMatches = gameObjects.table.call("getDictOfCardMatches",hand)
     
     for valueOfCard, cardsCount in pairs(cardMatches) do
         if(cardsCount == 1) then
@@ -152,7 +152,7 @@ function cardMatched(card, cardToMatch)
     end
     return 0
 end
-
+-- TODO: To move it to class Hand
 function getCardsFromValue(value)
     local cards = {}
     for index,card in ipairs(hand) do
