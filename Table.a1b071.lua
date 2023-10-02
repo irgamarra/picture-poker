@@ -73,22 +73,48 @@ function exchangeBets(waitSeconds)
     end
 end
 
--- TODO: TOO COMPLEX
+-- TODO: Hand class
 function getBestHand(hand1,hand2)
     local rateHand1 = getRate(hand1)
     local rateHand2 = getRate(hand2)
     print(rateHand1.bestSingleCard)
     print(rateHand2.bestSingleCard)
     if(rateHand1.matchRate > rateHand2.matchRate)then
-        return "hand1"
+        return hand1
     end
     if(rateHand1.matchRate < rateHand2.matchRate) then
-        return "hand2"
+        return hand2
     end
     if(rateHand1.matchRate == rateHand2.matchRate) then
-        return getBestCards(rateHand1,rateHand2)
+        if(rateHand1.bestMatchCardValue > rateHand2.bestMatchCardValue) then
+            return hand1
+        end
+        if(rateHand1.bestMatchCardValue < rateHand2.bestMatchCardValue) then
+            return hand2
+        end
+        if(rateHand1.bestMatchCardValue == rateHand2.bestMatchCardValue) then
+            if(rateHand1.worstPairCardValue > rateHand2.worstPairCardValue) then
+                return hand1
+            end
+            if(rateHand1.worstPairCardValue < rateHand2.worstPairCardValue) then
+                return hand2
+            end
+            if(rateHand1.worstPairCardValue == rateHand2.worstPairCardValue) then
+                if(rateHand1.bestSingleCard > rateHand2.bestSingeCard) then
+                    return hand1
+                end
+                if(rateHand1.bestSingleCard < rateHand2.bestSingleCard) then
+                    return hand2
+                end
+                if(rateHand1.bestSingleCard == rateHand2.bestSingleCard) then
+                    return nil
+                end
+            end
+        end
     end
 end
+
+
 -- TODO: TOO COMPLEX
 function getRate(hand)
     local rate = {matchRate = 0, bestMatchCardValue = 0, worstPairCardValue = 0, bestSingleCard = 0}
@@ -96,7 +122,11 @@ function getRate(hand)
     
     local isDoubleMatch = false
     for valueOfCard, numberOfSimilarCards in pairs(cardMatches) do
-        if(numberOfSimilarCards > 1) then
+        if(numberOfSimilarCards < 1) then
+            if(valueOfCard > rate.bestSingleCard) then
+                rate.bestSingleCard = valueOfCard
+            end
+        else
             if(rate.matchRate == 0) then
                 rate.matchRate = numberOfSimilarCards
             else 
@@ -116,10 +146,6 @@ function getRate(hand)
                 end
             else
                 rate.bestMatchCardValue = valueOfCard
-            end
-        else
-            if(valueOfCard > rate.bestSingleCard) then
-                rate.bestSingleCard = valueOfCard
             end
         end
             
