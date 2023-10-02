@@ -69,38 +69,65 @@ function exchangeBets(waitSeconds)
         local playerHand = getObjectFromGUID(playerHandGUID)
         local betZone = getObjectFromGUID(betZoneGUID)
         
-        if(luigiWins(zones.LuigisHand, playerHand)) then
-
-        end
+        local winnerHand = getBestHand(luigisHand,playerHand))
     end
 end
 
-function luigiWins(luigisHand, playerHand) 
-    
-    if(rateHand(luigisHand) > rateHand(playerHand)) then
-        return true
+-- TODO: TOO COMPLEX
+function getBestHand(hand1,hand2)
+    local rateHand1 = getRate(hand1)
+    local rateHand2 = getRate(hand2)
+    print(rateHand1.bestSingleCard)
+    print(rateHand2.bestSingleCard)
+    if(rateHand1.matchRate > rateHand2.matchRate)then
+        return "hand1"
     end
-    return false
+    if(rateHand1.matchRate < rateHand2.matchRate) then
+        return "hand2"
+    end
+    if(rateHand1.matchRate == rateHand2.matchRate) then
+        return getBestCards(rateHand1,rateHand2)
+    end
 end
-
--- TODO: To move hand functions to a Hand class
-function getMatchRate(hand)
-    local rate = {}
+-- TODO: TOO COMPLEX
+function getRate(hand)
+    local rate = {matchRate = 0, bestMatchCardValue = 0, worstPairCardValue = 0, bestSingleCard = 0}
     local cardMatches = getDictOfCardMatches(hand)
     
-    local matchRate = 0
-    
+    local isDoubleMatch = false
     for valueOfCard, numberOfSimilarCards in pairs(cardMatches) do
-        numberOfSimilarCards = numberOfSimilarCards - 1
-        if(matchRate == 0) then
-            matchRate = numberOfSimilarCards
-        else 
-            matchRate = matchRate + 0.5
+        if(numberOfSimilarCards > 1) then
+            if(rate.matchRate == 0) then
+                rate.matchRate = numberOfSimilarCards
+            else 
+                rate.matchRate = rate.matchRate + 0.5
+                isDoubleMatch = true
+            end
+
+            if(isDoubleMatch) then
+                if(numberOfSimilarCards == 3) then
+                    rate.worstPairCardValue = rate.bestMatchCardValue
+                    rate.worstPairCardValue = valueOfCard
+                elseif(rate.bestMatchCardValue >= valueOfCard) then
+                    rate.worstPairCardValue = valueOfCard
+                else
+                    rate.worstPairCardValue = rate.bestMatchCardValue 
+                    rate.bestMatchCardValue = valueOfCard
+                end
+            else
+                rate.bestMatchCardValue = valueOfCard
+            end
+        else
+            if(valueOfCard > rate.bestSingleCard) then
+                rate.bestSingleCard = valueOfCard
+            end
         end
+            
     end
 
     return rate
 end
+
 
 -- index = valueOfCard, value = numberOfSimilarCards
 function getDictOfCardMatches(hand)
