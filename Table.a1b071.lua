@@ -60,15 +60,78 @@ function bet(playerColor)
         end
     end
 end
+-- TODO: delete waitSeconds as parameter
+function exchangeBets(waitSeconds)
+    for playerColor, betZoneGUID in pairs(zones.betZonesGUID) do
+        local coinZoneGUID = zones.coinZonesGUID[playerColor]
+        local playerHandGUID = zones.playersHandsGUID[playerColor]
+        local coinZone = getObjectFromGUID(coinZoneGUID)
+        local playerHand = getObjectFromGUID(playerHandGUID)
+        local betZone = getObjectFromGUID(betZoneGUID)
+        
+        if(luigiWins(zones.LuigisHand, playerHand)) then
 
--- function startGameBet(waitForCoinStack)
---     function waitForCoinStack()
---         while
---     end
---     if (waitForCoinsStack) then
---         startLuaCoroutine(self, waitForCoinStack)
---     end
--- end
+        end
+    end
+end
+
+function luigiWins(luigisHand, playerHand) 
+    
+    if(rateHand(luigisHand) > rateHand(playerHand)) then
+        return true
+    end
+    return false
+end
+
+function rateHand(hand)
+    local rate = 0
+    local cardMatches = getDictOfCardMatches(hand)
+    
+    for valueOfCard, numberOfSimilarCards in pairs(cardMatches) do
+        rate = rate + numberOfSimilarCards
+    end
+
+    return rate
+end
+
+-- index = valueOfCard, value = numberOfSimilarCards
+function getDictOfCardMatches(hand)
+    local cardMatches = {}
+    
+    for index, card in ipairs(hand) do
+        local valueOfCard = tostring(getValueOfCard(card))
+        
+        if(cardMatches[valueOfCard] == nil) then
+            cardMatches[valueOfCard] = 1
+        end
+        cardMatches[valueOfCard] = cardMatches[valueOfCard] + getCardMatchesToTheRight(hand, card, index)
+        
+    end
+    return cardMatches
+end
+
+function getCardMatchesToTheRight(hand, card, outerIndex)  
+  local numberOfMatches = 0
+  
+  for innerIndex, cardToMatch in ipairs(hand) do
+        if(innerIndex > outerIndex) then
+        numberOfMatches = numberOfMatches + cardMatched(cardToMatch, card)
+        end
+  end
+  
+  return numberOfMatches
+end
+
+function cardMatched(card, cardToMatch)
+    if(cardToMatch.getName() == card.getName()) then
+        return 1
+    end
+    return 0
+end
+
+function getValueOfCard(card)
+    return card.getName():sub(1, 1)
+end 
 
 function stackObjects(params)
     function coinside()
