@@ -83,6 +83,7 @@ function luigiWins(luigisHand, playerHand)
     return false
 end
 
+-- TODO: To move hand functions to a Hand class
 function rateHand(hand)
     local rate = 0
     local cardMatches = getDictOfCardMatches(hand)
