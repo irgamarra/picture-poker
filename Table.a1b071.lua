@@ -84,7 +84,6 @@ function luigiWins(luigisHand, playerHand)
 end
 
 -- TODO: To move hand functions to a Hand class
-function rateHand(hand)
 function getMatchRate(hand)
     local rate = {}
     local cardMatches = getDictOfCardMatches(hand)
@@ -101,7 +100,6 @@ function getMatchRate(hand)
     end
 
     return rate
-end
 end
 
 -- index = valueOfCard, value = numberOfSimilarCards
