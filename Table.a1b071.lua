@@ -85,14 +85,23 @@ end
 
 -- TODO: To move hand functions to a Hand class
 function rateHand(hand)
-    local rate = 0
+function getMatchRate(hand)
+    local rate = {}
     local cardMatches = getDictOfCardMatches(hand)
     
+    local matchRate = 0
+    
     for valueOfCard, numberOfSimilarCards in pairs(cardMatches) do
-        rate = rate + numberOfSimilarCards
+        numberOfSimilarCards = numberOfSimilarCards - 1
+        if(matchRate == 0) then
+            matchRate = numberOfSimilarCards
+        else 
+            matchRate = matchRate + 0.5
+        end
     end
 
     return rate
+end
 end
 
 -- index = valueOfCard, value = numberOfSimilarCards
