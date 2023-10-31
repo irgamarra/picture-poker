@@ -22,36 +22,34 @@ function getBestHand(hand1,hand2)
 end
 -- TODO: TOO COMPLEX
 function getRate(hand)
-    local rate = {matchRate = 0, bestMatchCardValue = 0, worstPairCardValue = 0, bestSingleCard = 0}
+    local rate = {matchRate = 0, bestMatchCardValue = 0, worstPairCardValue = -1, bestSingleCard = 0}
     local cardMatches = getDictOfCardMatches(hand)
     log(cardMatches)
     local isDoubleMatch = false
-    for valueOfCard, numberOfSimilarCards in pairs(cardMatches) do
-        valueOfCard = tonumber(valueOfCard)
-        numberOfSimilarCards = tonumber(numberOfSimilarCards)
+    for card, matches in pairs(cardMatches) do
+        card = tonumber(card)
+        matches = tonumber(matches)
 
-        if(numberOfSimilarCards > 1) then
-            if(rate.matchRate ~= 0) then
-                rate.worstPairCardValue = getRateWorstPairCardValue(cardMatches)
-            end
-            rate.matchRate = getMatchRate(rate.matchRate, numberOfSimilarCards)
+        if(matches > 1) then
+            rate.matchRate = getMatchRate(rate.matchRate, matches)
 
             if(isDoubleMatch) then
-                if(numberOfSimilarCards == 3) then
+                if(matches == 3) then
                     rate.worstPairCardValue = rate.bestMatchCardValue
-                    rate.worstPairCardValue = valueOfCard
-                elseif(rate.bestMatchCardValue >= valueOfCard) then
-                    rate.worstPairCardValue = valueOfCard
+                    rate.worstPairCardValue = card
+                elseif(rate.bestMatchCardValue >= card) then
+                    rate.worstPairCardValue = card
                 else
                     rate.worstPairCardValue = rate.bestMatchCardValue 
-                    rate.bestMatchCardValue = valueOfCard
+                    rate.bestMatchCardValue = card
                 end
             else
-                rate.bestMatchCardValue = valueOfCard
+                rate.bestMatchCardValue = card
+                isDoubleMatch = true
             end
         else
-            if(valueOfCard > rate.bestSingleCard) then
-                rate.bestSingleCard = valueOfCard
+            if(card > rate.bestSingleCard) then
+                rate.bestSingleCard = card
             end
         end
             
@@ -72,22 +70,6 @@ function whichIsBest(value1,value2)
   end
 end
 
-function getRateWorstPairCardValue(cardMatches)
-    local worstCard = {card = 0, matches = 0}
-
-    for card, matches in pairs(cardMatches) do
-        card = tonumber(card)
-        matches = tonumber(matches)
-        
-        if(matches > 1) then
-            if(card < worstCard.card) then
-                worstCard = {card = card, matches = matches}
-            end
-        end
-    end
-
-    return worstCard.card
-end
 -- function getBestPair(hand1,hand2)
 --   if(rateHand1.worstPairCardValue > rateHand2.worstPairCardValue) then
 --       return hand1
