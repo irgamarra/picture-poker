@@ -6,53 +6,50 @@ local buttonDiscardID = "Discard"
 local buttonBetID = "Bet"
 
 local tagForCards = "Poker card"
-local bagGUID = "a0ed74"
-local luigiGUID = "3d45b3"
-local turnGUID = "752e64"
-local tableGUID = "a1b071"
-local discardZoneGUID = "670a2b"
 
-local zones = {
-    luigisHand = {},
+local gameObjectsGUIDs = {
+    cardsToPlayWith = "a0ed74",
+    luigi = "3d45b3",
+    turn = "752e64",
+    table = "a1b071",
+    hand = "5e0b77"
+}
+local gameObjects = {}
+
+local zonesGUID = {
+    luigisHand = "116688",
     luigisCoins = {},
-    discardZone = {},
-    betZonesGUID = {},
-    coinZonesGUID = {},
+    discardZone = "670a2b",
+    betZones = {
+        White = "e4b599"
+    },
+    coinZones = {
+        White = "e2380e"
+    },
 }
-
-local betZonesGUID = {
-    White = "e4b599",
-}
-local coinZonesGUID = {
-    White = "e2380e"
-}
-local gameObjects = {
-    bagOfCards = {},
-    luigi = {},
-    turn = {},
-    table = {}
-}
+local zones = {}
 
 local discardCount = 0
 
 function onLoad()
-    getGameObjects() 
-    getZones()
+    gameObjects = getObjectsFromListOfGUIDs(gameObjectsGUIDs) 
+    zones = getObjectsFromListOfGUIDs(zonesGUID)
     setVariablesOfGameObjects()
 end
 
-function getGameObjects()
-    gameObjects.bagOfCards = getObjectFromGUID(bagGUID)
-    gameObjects.luigi = getObjectFromGUID(luigiGUID)
-    gameObjects.turn = getObjectFromGUID(turnGUID)
-    gameObjects.table = getObjectFromGUID(tableGUID)
-end
+function getObjectsFromListOfGUIDs(guids)
+    local objectsList = {}
 
-function getZones()
-    zones.luigisHand = getObjectFromGUID('116688')
-    zones.discardZone = getObjectFromGUID(discardZoneGUID)
-    zones.betZonesGUID = betZonesGUID
-    zones.coinZonesGUID = coinZonesGUID
+    for key, guid in pairs(guids) do
+        if(type(guid) == "string") then
+            objectsList[key] = getObjectFromGUID(guid)
+        end
+        if(type(guid) == "table") then
+            objectsList[key] = getObjectsFromListOfGUIDs(guid)
+        end
+    end
+
+    return objectsList
 end
 
 function setVariablesOfGameObjects()
@@ -64,14 +61,14 @@ function setVariablesOfGameObjects()
         gameObjects = gameObjects,
         maxHand = maxHand,
     }
-    gameObjects.turn.call("setVariables", bagGUID)
+    gameObjects.turn.call("setVariables", gameObjects.cardsToPlayWith)
     
     -- TODO: Make it work
     -- for key,gameObject in ipairs(gameObjects) do
     --     gameObject.call("setVariables", params)
     -- end
 
-    gameObjects.bagOfCards.call("setVariables", params)
+    gameObjects.cardsToPlayWith.call("setVariables", params)
     gameObjects.luigi.call("setVariables", params)
     gameObjects.table.call("setVariables", params)
 end
@@ -79,24 +76,24 @@ end
 function startButton()
     gameObjects.table.call("deleteAllCards", tagForCards)
     gameObjects.table.call("deleteAllCoins")
-    gameObjects.bagOfCards.call("buildDeck")
+    gameObjects.cardsToPlayWith.call("buildDeck")
     gameObjects.table.call("giveCoinsToAll", startingCoins)
-    gameObjects.bagOfCards.call("dealFiveToSeatedPlayers")
+    gameObjects.cardsToPlayWith.call("dealFiveToSeatedPlayers")
     --gameObjects.table.call("startGameBet", true)
-    
+
     UIVisibilityToAllSeatedColors(buttonDiscardID)
     UIVisibilityToAllSeatedColors(buttonBetID)
 end
 
 function nextTurn()
     gameObjects.table.call("deleteAllCards", tagForCards)
-    gameObjects.bagOfCards.call("buildDeck")
-    gameObjects.bagOfCards.call("dealFiveToSeatedPlayers")
+    gameObjects.cardsToPlayWith.call("buildDeck")
+    gameObjects.cardsToPlayWith.call("dealFiveToSeatedPlayers")
     UIVisibilityToAllSeatedColors(buttonDiscardID)
 end
 
 function discard(player_clicker)
-    local betZone = getObjectFromGUID(zones.betZonesGUID[player_clicker.color])
+    local betZone = zones.betZones[player_clicker.color]
     if(#betZone.getObjects() < 1) then
         print(player_clicker.color.." please make a bet first")
         return false
@@ -104,13 +101,14 @@ function discard(player_clicker)
     hideUIVisibilityForColor(player_clicker.color, buttonDiscardID)
     hideUIVisibilityForColor(player_clicker.color, buttonBetID)
     discardCount = discardCount + 1
-    gameObjects.bagOfCards.call("fillHandOfPlayer", player_clicker)
+    gameObjects.cardsToPlayWith.call("fillHandOfPlayer", player_clicker)
 
     if(discardCount == #getSeatedPlayers()) then
         gameObjects.luigi.call("playTurn")
         discardCount = 0
     end
 
+    
     return true
 end
 

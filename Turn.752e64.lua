@@ -1,7 +1,7 @@
 local bagObject
 
-function setVariables(bagGUID)
-    bagObject = getObjectFromGUID(bagGUID)
+function setVariables(bag)
+    bagObject = bag
 end
 
 function turn()
