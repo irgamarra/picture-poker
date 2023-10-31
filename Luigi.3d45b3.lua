@@ -35,8 +35,9 @@ function discardPhase()
     local discard = discardCards(cardsToDiscard)
     refillHand(discard)
     Wait.condition(rateHand, function() return handHasBeenRefilled end)
-    -- TODO: gameObjects.tableObject.refillHand()
-    -- gameObjects.tableObject.exchangeBets()
+    
+    --TODO: hand.getBestHand of each player
+    --TODO: gameObjects.tableObject.exchangeBets() for each player
     -- TODO: gameObjects.tableObject.getLuigisCoins()
     --getCoins()
     -- TODO: gameObjects.tableObject.winLoseCondition() ??
@@ -48,7 +49,6 @@ end
 function rateHand()
     function inner()
         log(gameObjects.hand.call("getRate",getHand()))
-        log(hand)
     end
     waitForHand(inner)
 end
